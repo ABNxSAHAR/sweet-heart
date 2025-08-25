@@ -32,10 +32,10 @@
 </head>
 <body>
 <canvas id="c"></canvas>
-<a class="back" href="index.html">← zurück</a>
+<a class="back" href="index.html">← ارجع</a>
 <div class="center">
-  <div class="de">ich auch ❤️</div>
-  <div class="ar">أنا أكتر</div>
+  <div class="de">❤️ أنا أكتر</div>
+
 </div>
 <script>
   const cnv=document.getElementById('c'),ctx=cnv.getContext('2d',{alpha:true});
@@ -80,13 +80,10 @@
     const base=Math.min(w,h)/34;
 
     bgHue=(bgHue+0.12)%360;
-const bg=ctx.createRadialGradient(w*0.3,h*0.25,100,w*0.7,h*0.8,Math.max(w,h)*1.2);
-bg.addColorStop(0,`hsla(${(bgHue+280)%360},95%,55%,0.8)`);
-bg.addColorStop(0.5,`hsla(${(bgHue+200)%360},90%,25%,0.9)`);
-bg.addColorStop(1,`hsla(${(bgHue+120)%360},90%,12%,1)`);
-ctx.fillStyle=bg;
-ctx.fillRect(0,0,w,h);
-
+    const bg=ctx.createRadialGradient(w*0.25,h*0.2,80,w*0.8,h*0.9,Math.max(w,h));
+    bg.addColorStop(0,`hsla(${(bgHue+320)%360},85%,15%,0.9)`);
+    bg.addColorStop(1,`hsla(${(bgHue+120)%360},92%,7%,1)`);
+    ctx.fillStyle=bg; ctx.fillRect(0,0,w,h);
 
     const targetProg=Math.min(1, elapsed/3600);
     const tempo=0.06+0.04*(0.5+0.5*Math.sin(ts*0.0013));
