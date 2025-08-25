@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Oh nein 😅</title>
+  <style>
+    html,body{height:100%;margin:0}
+    body{display:grid; place-items:center; background:#0e0f14; color:#fff; font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial}
+    .wrap{position:relative; width:min(900px, 94vw); text-align:center}
+    img{width:100%; height:auto; border-radius:20px; border:1px solid rgba(255,255,255,.12); box-shadow:0 20px 60px rgba(0,0,0,.5)}
+    a{position:fixed; left:16px; top:16px; padding:10px 14px; border-radius:12px; text-decoration:none; color:#fff; 
+      background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); backdrop-filter: blur(6px); font-weight:700}
+    p{opacity:.8}
+  </style>
+</head>
+<body>
+  <a href="index.html">← العودة</a>
+  <div class="wrap">
+    <img id="img" alt="Dein Bild" src="kill u.GIF" />
+    <p>كشفتككككك يا حقيييير</p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const link = params.get('img');
+    if (link) {
+      const img = document.getElementById('img');
+      img.src = link;
+    }
+  </script>
+</body>
+</html>

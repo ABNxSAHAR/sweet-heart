@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Liebst du mich?</title>
+  <style>
+    :root { --bg:#0f0f13; --card:#171822; --text:#fff; --muted:#b8b9c2; }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100svh; display:grid; place-items:center;
+      background: radial-gradient(1200px 800px at 20% -10%, #2a2b36 0%, #0f0f13 40%, #0b0c10 100%);
+      color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Color Emoji";
+    }
+    .card{
+      background:linear-gradient(180deg, #1b1c27, #151623);
+      border:1px solid #2a2c3a; border-radius:24px; padding:28px; width:min(520px, 92vw);
+      box-shadow: 0 10px 30px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,255,255,.03);
+      text-align:center;
+    }
+    h1{margin:6px 0 14px; font-weight:800; letter-spacing:.3px}
+    p{margin:0 0 20px; color:var(--muted)}
+    .btns{display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
+    a.btn{
+      text-decoration:none; padding:14px 18px; border-radius:14px; font-weight:700; line-height:1;
+      border:1px solid #34364a; background:#1d1f2d; transition:.18s transform, .18s opacity, .18s filter;
+      display:inline-flex; align-items:center; gap:10px; font-size:16px;
+    }
+    a.btn span.emoji{font-size:20px}
+    a.btn.primary{background:linear-gradient(90deg,#ff4d6d,#ff7a00); border:none; color:#fff}
+    a.btn:hover{transform:translateY(-2px)}
+    a.btn:active{transform:translateY(0)}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>بتحبنييي؟؟؟؟</h1>
+    <p>الرجاء الجواب بصرااااحة فقططط!!!!</p>
+    <div class="btns">
+      <a class="btn primary" href="yes.html"><span class="emoji">❤️</span> اي</a>
+      <a class="btn" href="no.html"><span class="emoji">🔪</span> لا</a>
+    </div>
+  </div>
+</body>
+</html>

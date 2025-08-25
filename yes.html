@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ich auch — أنا أكتر</title>
+<style>
+  html,body{height:100%;margin:0}
+  body{background:#06070b;overflow:hidden;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial}
+  #c{position:fixed;inset:0;width:100%;height:100%}
+  .center{
+    position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+    text-align:center;pointer-events:none;line-height:1.1
+  }
+  .center .de{
+    font-weight:900;font-size:clamp(26px,7vw,64px);letter-spacing:.02em;
+    background:conic-gradient(from 0deg,#ff2e63,#ffa700,#27e1ff,#9d4edd,#ff2e63);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 4px 18px rgba(255,255,255,.25))
+  }
+  .center .ar{
+    margin-top:.25em;font-weight:800;font-size:clamp(18px,5.2vw,36px);
+    background:linear-gradient(90deg,#ffd1dc,#b5ffe1,#cdb4ff);
+    -webkit-background-clip:text;background-clip:text;color:transparent
+  }
+  .back{
+    position:fixed;left:14px;top:14px;padding:10px 14px;border-radius:12px;text-decoration:none;
+    color:#fff;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);
+    backdrop-filter:blur(6px);font-weight:700
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<a class="back" href="index.html">← ارجع</a>
+<div class="center">
+  <div class="de">❤️ أنا أكتر</div>
+
+</div>
+<script>
+  const cnv=document.getElementById('c'),ctx=cnv.getContext('2d',{alpha:true});
+  const DPR=Math.max(1,devicePixelRatio||1);
+  function rs(){cnv.width=innerWidth*DPR;cnv.height=innerHeight*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)}
+  addEventListener('resize',rs,{passive:true});rs();
+
+  function hp(t,s){const x=16*Math.sin(t)**3; const y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t); return {x:x*s,y:-y*s};}
+  function hNormal(t,s){
+    const d=0.0008, p1=hp(t-d,s), p2=hp(t+d,s);
+    let tx=p2.x-p1.x, ty=p2.y-p1.y;
+    const len=Math.hypot(tx,ty)||1; tx/=len; ty/=len;
+    return {nx:-ty, ny:tx};
+  }
+
+  const tracers=[];
+  function makeTracer(theta,base){
+    return{
+      theta,
+      span:0.18+Math.random()*0.18,
+      width:0.8+Math.random()*0.8,
+      alpha:1,
+      life:0,
+      ttl:900+Math.random()*500,
+      hueShift:Math.random()*160,
+      curlAmp: (Math.min(innerWidth,innerHeight)/34)*0.10*(0.7+Math.random()*0.6),
+      curlFreq: 6+Math.random()*6,
+      curlPhase: Math.random()*Math.PI*2,
+      grow: 0.8+Math.random()*0.6,
+      speed: 0.010+Math.random()*0.012
+    }
+  }
+
+  let start=null, prog=0, wobble=1, bgHue=0;
+
+  function easeInOut(t){return 0.5*(1-Math.cos(Math.PI*t));}
+
+  function loop(ts){
+    if(start==null) start=ts;
+    const elapsed=ts-start;
+    const w=cnv.width/DPR,h=cnv.height/DPR, cx=w/2, cy=h/2;
+    const base=Math.min(w,h)/34;
+
+    bgHue=(bgHue+0.12)%360;
+    const bg=ctx.createRadialGradient(w*0.25,h*0.2,80,w*0.8,h*0.9,Math.max(w,h));
+    bg.addColorStop(0,`hsla(${(bgHue+320)%360},85%,15%,0.9)`);
+    bg.addColorStop(1,`hsla(${(bgHue+120)%360},92%,7%,1)`);
+    ctx.fillStyle=bg; ctx.fillRect(0,0,w,h);
+
+    const targetProg=Math.min(1, elapsed/3600);
+    const tempo=0.06+0.04*(0.5+0.5*Math.sin(ts*0.0013));
+    prog += (easeInOut(targetProg)-prog)*tempo;
+
+    const theta=prog*Math.PI*2;
+
+    const targetWob=1+0.022*Math.sin(ts*0.0014);
+    wobble += (targetWob-wobble)*0.1;
+
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.scale(wobble,wobble);
+
+    const hueBase=(ts*0.018)%360;
+    const step=0.008;
+
+    ctx.shadowBlur=16;
+    ctx.shadowColor=`hsla(${(hueBase+30)%360},100%,65%,.35)`;
+    ctx.lineCap='round';
+
+    ctx.beginPath();
+    for(let a=0;a<=theta;a+=step){const p=hp(a,base*1.12); if(a===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y);}
+    ctx.lineWidth=2.0;
+    ctx.strokeStyle=`hsla(${(hueBase+90)%360},100%,70%,.55)`;
+    ctx.stroke();
+
+    ctx.beginPath();
+    for(let a=0;a<=theta;a+=step){const p=hp(a,base*1.12); if(a===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y);}
+    ctx.lineWidth=1.2;
+    ctx.shadowBlur=8;
+    ctx.shadowColor=`hsla(${(hueBase+150)%360},100%,70%,.6)`;
+    ctx.strokeStyle=`hsla(${(hueBase+210)%360},100%,88%,.95)`;
+    ctx.stroke();
+
+    if(theta<Math.PI*2){
+      while(tracers.length<10) tracers.push(makeTracer(theta*(0.6+Math.random()*0.35),base));
+    } else {
+      if(tracers.length<6 && Math.random()<0.15) tracers.push(makeTracer(Math.random()*Math.PI*2,base));
+    }
+
+    for(let i=tracers.length-1;i>=0;i--){
+      const t=tracers[i];
+      t.life+=1;
+      t.alpha = Math.max(0, 1 - t.life/t.ttl);
+      t.theta += t.speed*(0.7+0.3*(0.5+0.5*Math.sin(ts*0.002)));
+      const seg=24;
+      ctx.save();
+      ctx.globalAlpha=t.alpha;
+      ctx.lineWidth=t.width;
+      ctx.shadowBlur=14; ctx.shadowColor=`hsla(${(hueBase+t.hueShift)%360},100%,60%,.35)`;
+      ctx.strokeStyle=`hsla(${(hueBase+t.hueShift)%360},100%,65%,.85)`;
+      ctx.beginPath();
+      for(let k=0;k<=seg;k++){
+        const a=t.theta + (k/seg)*t.span;
+        const p=hp(a,base*1.15);
+        const n=hNormal(a,base*1.15);
+        const curl=t.curlAmp*Math.sin(a*t.curlFreq + t.curlPhase)*(1-Math.min(1,t.life/400));
+        const x=p.x + n.nx*curl, y=p.y + n.ny*curl;
+        if(k===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      ctx.restore();
+      if(t.alpha<=0) tracers.splice(i,1);
+    }
+
+    ctx.restore();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+</script>
+</body>
+</html>
